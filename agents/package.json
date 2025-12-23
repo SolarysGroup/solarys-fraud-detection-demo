@@ -1,0 +1,33 @@
+{
+  "name": "@solarys/agents",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev:fraud-detection": "tsx watch src/fraud-detection/server.ts",
+    "dev:claims-investigation": "tsx watch src/claims-investigation/server.ts",
+    "start:fraud-detection": "node dist/fraud-detection/server.js",
+    "start:claims-investigation": "node dist/claims-investigation/server.js",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@a2a-js/sdk": "^0.3.7",
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@google/generative-ai": "^0.21.0",
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@solarys/config-typescript": "*",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "solarys-fraud-detection-demo",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "agents"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:api": "npm run dev --workspace=@solarys/api",
+    "dev:web": "npm run dev --workspace=@solarys/web",
+    "dev:demo": "concurrently -n mcp,detect,invest,api,web -c blue,cyan,green,yellow,magenta \"npm run dev --workspace=@solarys/mcp-server\" \"npm run dev:fraud-detection --workspace=@solarys/agents\" \"npm run dev:claims-investigation --workspace=@solarys/agents\" \"npm run dev --workspace=@solarys/api\" \"npm run dev --workspace=@solarys/web\"",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "db:generate": "dotenv -e .env -- npm run generate --workspace=@solarys/db",
+    "db:push": "dotenv -e .env -- npm run db:push --workspace=@solarys/db",
+    "db:studio": "dotenv -e .env -- npm run studio --workspace=@solarys/db",
+    "db:seed": "dotenv -e .env -- npm run seed --workspace=@solarys/db",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "dotenv-cli": "^11.0.0",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@11.6.0"
+}

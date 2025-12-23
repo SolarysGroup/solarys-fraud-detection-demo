@@ -1,0 +1,40 @@
+{
+  "name": "@solarys/mcp-server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/stdio.js",
+  "types": "./dist/stdio.d.ts",
+  "bin": {
+    "fraud-detection-mcp": "./dist/stdio.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "dev": "tsx watch src/http.ts",
+    "dev:stdio": "tsx watch src/stdio.ts",
+    "dev:http": "tsx watch src/http.ts",
+    "start": "node dist/http.js",
+    "start:stdio": "node dist/stdio.js",
+    "start:http": "node dist/http.js",
+    "generate-embeddings": "tsx scripts/generateEmbeddings.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "@solarys/db": "*",
+    "@solarys/tools": "*",
+    "@solarys/types": "*",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "openai": "^4.73.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@solarys/config-typescript": "*",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id             String  @id // PRV51001 format
+  potentialFraud Boolean @default(false)
+
+  // Computed/aggregated fields (populated by seed or analysis)
+  riskScore          Float?
+  totalClaims        Int    @default(0)
+  totalReimbursement Float  @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  claims Claim[]
+
+  @@index([potentialFraud])
+}
+
+model Beneficiary {
+  id                    String    @id // BENE11001 format
+  dateOfBirth           DateTime
+  dateOfDeath           DateTime?
+  gender                Int // 1 or 2
+  race                  Int?
+  renalDiseaseIndicator Boolean   @default(false)
+  state                 Int
+  county                Int
+
+  // Coverage months
+  partACovMonths Int @default(0)
+  partBCovMonths Int @default(0)
+
+  // Chronic conditions (1 = Yes, 2 = No in source data)
+  chronicAlzheimer          Boolean @default(false)
+  chronicHeartFailure       Boolean @default(false)
+  chronicKidneyDisease      Boolean @default(false)
+  chronicCancer             Boolean @default(false)
+  chronicObstructivePulm    Boolean @default(false)
+  chronicDepression         Boolean @default(false)
+  chronicDiabetes           Boolean @default(false)
+  chronicIschemicHeart      Boolean @default(false)
+  chronicOsteoporosis       Boolean @default(false)
+  chronicRheumatoidArthritis Boolean @default(false)
+  chronicStroke             Boolean @default(false)
+
+  // Annual amounts
+  ipAnnualReimbursement Float @default(0)
+  ipAnnualDeductible    Float @default(0)
+  opAnnualReimbursement Float @default(0)
+  opAnnualDeductible    Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  claims Claim[]
+
+  @@index([state])
+  @@index([dateOfDeath])
+}
+
+model Claim {
+  id            String   @id // CLM46614 format
+  providerId    String
+  beneficiaryId String
+  claimStartDate DateTime
+  claimEndDate   DateTime
+  isInpatient    Boolean  @default(false)
+
+  reimbursementAmount Float @default(0)
+  deductiblePaid      Float @default(0)
+
+  // Inpatient-specific fields
+  admissionDate        DateTime?
+  dischargeDate        DateTime?
+  admitDiagnosisCode   String?
+  diagnosisGroupCode   String?
+
+  // Physicians
+  attendingPhysician  String?
+  operatingPhysician  String?
+  otherPhysician      String?
+
+  // Diagnosis and procedure codes stored as JSON arrays
+  diagnosisCodes Json @default("[]")
+  procedureCodes Json @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  provider    Provider    @relation(fields: [providerId], references: [id])
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id])
+
+  @@index([providerId])
+  @@index([beneficiaryId])
+  @@index([claimStartDate])
+  @@index([isInpatient])
+}
+
+// Anomaly detection results
+model Anomaly {
+  id          String   @id @default(cuid())
+  type        String
+  severity    String // low, medium, high, critical
+  providerId  String
+  description String
+  metrics     Json     @default("{}") // JSON object with detection metrics
+  detectedAt  DateTime @default(now())
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([providerId])
+  @@index([severity])
+  @@index([resolved])
+  @@index([detectedAt])
+}
