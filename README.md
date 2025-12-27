@@ -16,7 +16,7 @@ Engineered by [the Solarys Group](https://solarys.ai) as a proof-of-concept for 
 - [Key Components](#key-components)
 - [Fraud Detection Tools](#fraud-detection-tools)
 - [Data](#data)
-- [Getting Started](#getting-started)
+- [Live Demo](#live-demo)
 - [Project Structure](#project-structure)
 
 ---
@@ -196,45 +196,9 @@ The data is loaded into PostgreSQL and includes computed fields for risk scoring
 
 ---
 
-## Getting Started
+## Live Demo
 
-### Prerequisites
-
-- Node.js 20+
-- PostgreSQL 15+
-- API keys: `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `OPENAI_API_KEY` (for embeddings)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/BizBeams/solarys-fraud-detection-demo.git
-cd solarys-fraud-detection-demo
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys and database URL
-
-# Set up the database
-npm run db:push
-npm run db:seed
-
-# Start all services
-npm run dev
-```
-
-### Services
-
-| Service | Port | URL |
-|---------|------|-----|
-| Frontend | 3000 | http://localhost:3000/trs-demo |
-| API Server | 3001 | http://localhost:3001 |
-| Detection Agent | 3002 | http://localhost:3002 |
-| Investigation Agent | 3003 | http://localhost:3003 |
-| MCP Server | 3004 | http://localhost:3004 |
+**[labs.solarys.ai/mcp-a2a](https://labs.solarys.ai/mcp-a2a)**
 
 ---
 
