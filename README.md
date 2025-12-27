@@ -4,6 +4,8 @@ A demonstration of AI-powered healthcare fraud detection using multi-vendor AI a
 
 Engineered by [the Solarys Group](https://solarys.ai) as a proof-of-concept for government healthcare fraud investigation systems.
 
+**[Try the Live Demo →](https://labs.solarys.ai/mcp-a2a)**
+
 ---
 
 ## Table of Contents
@@ -16,7 +18,6 @@ Engineered by [the Solarys Group](https://solarys.ai) as a proof-of-concept for 
 - [Key Components](#key-components)
 - [Fraud Detection Tools](#fraud-detection-tools)
 - [Data](#data)
-- [Live Demo](#live-demo)
 - [Project Structure](#project-structure)
 
 ---
@@ -193,12 +194,6 @@ This demo uses the [Healthcare Provider Fraud Detection Dataset](https://www.kag
 - **138,000+ Medicare beneficiaries** with demographics and chronic condition flags
 
 The data is loaded into PostgreSQL and includes computed fields for risk scoring and anomaly detection.
-
----
-
-## Live Demo
-
-**[labs.solarys.ai/mcp-a2a](https://labs.solarys.ai/mcp-a2a)**
 
 ---
 
