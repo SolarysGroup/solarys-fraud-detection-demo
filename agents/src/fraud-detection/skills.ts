@@ -3,7 +3,7 @@ import { config } from '../shared/config.js';
 
 export const fraudDetectionAgentCard: AgentCard = {
   name: 'Fraud Detection Agent',
-  description: 'Analyzes Texas Retirement System healthcare claims for fraud patterns, anomalies, and suspicious provider behavior.',
+  description: 'Analyzes healthcare claims for fraud patterns, anomalies, and suspicious provider behavior.',
   url: `http://localhost:${config.detectionAgentPort}/a2a/jsonrpc`,
   provider: {
     organization: 'Solarys',

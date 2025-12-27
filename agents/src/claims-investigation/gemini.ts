@@ -92,7 +92,7 @@ export class GeminiClient {
     this.model = genAI.getGenerativeModel({
       model: 'gemini-2.0-flash',
       tools: [{ functionDeclarations: toolDefinitions }],
-      systemInstruction: `You are a Claims Investigation Agent for the Texas Retirement System healthcare fraud detection program.
+      systemInstruction: `You are a Claims Investigation Agent for the Solarys healthcare fraud detection platform.
 
 Your role is to conduct thorough investigations into flagged healthcare providers, explain risk assessments, and help analysts understand fraud patterns.
 

@@ -31,10 +31,32 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "messages array is required" });
   }
 
-  // Get the last user message to send to the agent
-  const lastUserMessage = messages.filter((m) => m.role === "user").pop();
-  if (!lastUserMessage) {
-    return res.status(400).json({ error: "No user message found" });
+  // Build a combined message that preserves full context and conversation history
+  // The frontend sends: [context + first question, ...history, new question]
+  // We need to send all of this to the agent as a single coherent message
+  let combinedMessage: string;
+
+  if (messages.length === 1) {
+    // Single message - just send it (includes context prefix if present)
+    combinedMessage = messages[0]?.content || "";
+  } else {
+    // Multiple messages - combine them to preserve conversation flow
+    // First message contains the system context, subsequent messages are the conversation
+    const parts: string[] = [];
+
+    for (const msg of messages) {
+      if (msg.role === "user") {
+        parts.push(`User: ${msg.content}`);
+      } else {
+        parts.push(`Assistant: ${msg.content}`);
+      }
+    }
+
+    combinedMessage = parts.join("\n\n");
+  }
+
+  if (!combinedMessage.trim()) {
+    return res.status(400).json({ error: "No message content found" });
   }
 
   // Set up SSE
@@ -52,7 +74,7 @@ router.post("/", async (req, res) => {
     console.log(`[Chat Route] Sending message to Detection Agent via A2A...`);
 
     // Stream events from the Detection Agent
-    for await (const event of sendToDetectionAgent(lastUserMessage.content)) {
+    for await (const event of sendToDetectionAgent(combinedMessage)) {
       // Forward A2A events to the frontend as SSE
       switch (event.type) {
         case 'agent_active':

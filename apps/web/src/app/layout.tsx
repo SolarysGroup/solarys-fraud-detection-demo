@@ -4,6 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Solarys Fraud Detection Demo",
   description: "MCP-compliant AI fraud detection system",
+  icons: { icon: "/solaryslogo.svg", apple: "/solaryslogo.svg" },
 };
 
 export default function RootLayout({

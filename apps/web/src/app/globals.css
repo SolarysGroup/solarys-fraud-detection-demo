@@ -12,6 +12,10 @@
   border-radius: 0 !important;
 }
 
+.rounded-full-override {
+  border-radius: 9999px !important;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
