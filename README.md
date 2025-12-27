@@ -38,68 +38,35 @@ This architecture avoids vendor lock-in and enables best-of-breed AI selection p
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                              Frontend                                    │
-│                         (Next.js React App)                             │
-│                                                                         │
-│   ┌─────────────┐  ┌─────────────┐  ┌──────────────────────────────┐   │
-│   │ Provider    │  │ Live        │  │ Investigation Report         │   │
-│   │ Table       │  │ Investigation│ │ (Risk Score, Findings)       │   │
-│   └─────────────┘  └─────────────┘  └──────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    │ HTTP (Server-Sent Events)
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                            API Server                                    │
-│                          (Express.js)                                    │
-│                                                                         │
-│   • Routes chat messages to Detection Agent                             │
-│   • Streams real-time events back to frontend                           │
-│   • Exposes MCP tools directly for testing                              │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    │ A2A Protocol (JSON-RPC)
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                     Detection Agent (Claude)                             │
-│                        Port 3002                                         │
-│                                                                         │
-│   • Primary orchestration agent                                          │
-│   • Runs up to 10 tool iterations per request                           │
-│   • Can delegate to Investigation Agent via A2A                         │
-│   • Publishes structured events (tool calls, thinking, delegations)     │
-└─────────────────────────────────────────────────────────────────────────┘
-           │                                           │
-           │ A2A Protocol                              │ MCP Protocol
-           ▼                                           ▼
-┌─────────────────────────┐              ┌────────────────────────────────┐
-│ Investigation Agent     │              │        MCP Server              │
-│ (Gemini)                │              │        Port 3004               │
-│ Port 3003               │              │                                │
-│                         │──MCP──────▶  │  9 Fraud Detection Tools:      │
-│ • Deep-dive analysis    │              │  • find_anomalies              │
-│ • Risk score explain    │              │  • detect_fraud_rings          │
-│ • Pattern investigation │              │  • check_deceased_claims       │
-└─────────────────────────┘              │  • investigate_provider        │
-                                         │  • get_provider_stats          │
-                                         │  • explain_risk_score          │
-                                         │  • search_similar_providers    │
-                                         │  • search_fraud_patterns       │
-                                         │  • get_audit_log               │
-                                         └────────────────────────────────┘
-                                                        │
-                                                        │ Prisma ORM
-                                                        ▼
-                                         ┌────────────────────────────────┐
-                                         │      PostgreSQL Database       │
-                                         │                                │
-                                         │  • 558,000 healthcare claims   │
-                                         │  • 5,410 providers             │
-                                         │  • 138,000 beneficiaries       │
-                                         │  • Fraud labels and anomalies  │
-                                         └────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Frontend["Frontend (Next.js)"]
+        UI[Investigation UI]
+    end
+
+    subgraph API["API Server (Express)"]
+        Routes[SSE Streaming]
+    end
+
+    subgraph Agents["AI Agents"]
+        Claude["Detection Agent<br/>(Claude)"]
+        Gemini["Investigation Agent<br/>(Gemini)"]
+    end
+
+    subgraph MCP["MCP Server"]
+        Tools["9 Fraud Detection Tools"]
+    end
+
+    subgraph DB["PostgreSQL"]
+        Data["558k claims / 5.4k providers"]
+    end
+
+    UI -->|"HTTP/SSE"| Routes
+    Routes -->|"A2A Protocol"| Claude
+    Claude <-->|"A2A Protocol"| Gemini
+    Claude -->|"MCP Protocol"| Tools
+    Gemini -->|"MCP Protocol"| Tools
+    Tools -->|"Prisma"| Data
 ```
 
 ---
