@@ -23,16 +23,14 @@ Engineered by [the Solarys Group](https://solarys.ai) as a proof-of-concept for 
 
 ## Overview
 
-Healthcare fraud costs the U.S. government tens of billions of dollars annually. Traditional rule-based detection systems miss sophisticated fraud patterns. This demo shows how multiple AI agents can collaborate to investigate fraud more effectively:
+Two AI agents collaborate on fraud investigations:
 
-1. **Detection Agent (Claude)** - Orchestrates the investigation, runs initial analysis, and coordinates with other agents
-2. **Investigation Agent (Gemini)** - Performs deep-dive investigations when complex analysis is needed
+1. **Detection Agent (Claude)** - Primary orchestrator, runs initial analysis, delegates when needed
+2. **Investigation Agent (Gemini)** - Deep-dive specialist for complex cases
 
-The agents communicate using **open, vendor-neutral protocols**:
-- **MCP** for tool access (database queries, anomaly detection, pattern matching)
-- **A2A** for agent-to-agent delegation and collaboration
-
-This architecture avoids vendor lock-in and enables best-of-breed AI selection per task.
+Communication happens over open protocols:
+- **MCP** - Tool access (queries, anomaly detection, pattern matching)
+- **A2A** - Agent-to-agent delegation
 
 ---
 
@@ -75,18 +73,9 @@ flowchart TB
 
 ### MCP (Model Context Protocol)
 
-**What is MCP?**
+[MCP](https://modelcontextprotocol.io/) is an open protocol by Anthropic that standardizes how AI models interact with external tools. Both agents in this demo access fraud detection tools through the same MCP server.
 
-MCP is an open protocol developed by Anthropic that standardizes how AI models interact with external tools and data sources. Think of it as a universal adapter that lets any AI model use any tool, regardless of vendor.
-
-**Why MCP matters for government systems:**
-
-1. **Vendor Neutrality** - Tools built with MCP work with any LLM (Claude, GPT, Gemini, Llama, etc.)
-2. **Security Boundary** - Clear separation between AI reasoning and tool execution
-3. **Auditability** - Every tool call is logged with inputs, outputs, and timing
-4. **Standardization** - Common interface reduces integration complexity
-
-**How MCP works in this demo:**
+**Request flow:**
 
 ```
 AI Agent                    MCP Server                    Database
@@ -110,18 +99,9 @@ AI Agent                    MCP Server                    Database
 
 ### A2A (Agent-to-Agent Protocol)
 
-**What is A2A?**
+[A2A](https://github.com/google/A2A) is an open protocol by Google that enables AI agents to communicate and delegate tasks. The Detection Agent (Claude) delegates deep-dive investigations to the Investigation Agent (Gemini) via A2A.
 
-A2A is an open protocol developed by Google that enables AI agents from different vendors to communicate and delegate tasks to each other. It's like HTTP for AI agents - a standard way for agents to discover, message, and collaborate with each other.
-
-**Why A2A matters for government systems:**
-
-1. **Multi-Vendor Orchestration** - Use the best AI for each task without lock-in
-2. **Specialization** - Different agents can have different capabilities and clearances
-3. **Scalability** - Add new specialized agents without rewriting existing systems
-4. **Interoperability** - Agents from different contractors can work together
-
-**How A2A works in this demo:**
+**Delegation flow:**
 
 ```
 API Server                  Detection Agent              Investigation Agent
@@ -309,4 +289,4 @@ MIT
 
 ## Contact
 
-Engineered by [the Solarys Group](https://solarys.ai) - AI automation for healthcare and government.
+Engineered by [the Solarys Group](https://solarys.ai) - AI automation and data processing.
