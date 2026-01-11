@@ -18,13 +18,13 @@ const app = express();
 app.set("trust proxy", 1);
 const PORT = process.env.PORT ?? 3001;
 
-// Rate limiting for chat endpoint (5 requests per IP per hour)
+// Rate limiting for chat endpoint
 const chatLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5, // 5 requests per hour per IP
+  max: 50, // 50 requests per hour per IP
   message: {
     error: "Rate limit exceeded",
-    message: "You've reached the maximum of 5 requests per hour. This is a demo application with limited API capacity. Please try again later.",
+    message: "You've reached the maximum of 50 requests per hour. This is a demo application with limited API capacity. Please try again later.",
     retryAfter: "1 hour"
   },
   standardHeaders: true,
