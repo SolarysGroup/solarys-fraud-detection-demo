@@ -111,17 +111,20 @@ export class ClaimsInvestigationAgent implements AgentExecutor {
       const gemini = new GeminiClient();
       let response = await gemini.sendMessage(query);
       console.log(`[ClaimsInvestigationAgent] ========== GEMINI RESPONDED ==========`);
-      console.log(`[ClaimsInvestigationAgent] Full response:`, JSON.stringify({ text: response.text, toolCalls: response.toolCalls?.map(t => t.name), finishReason: response.finishReason }));
+      console.log(`[ClaimsInvestigationAgent] Full response:`, JSON.stringify({ thinking: response.thinking?.substring(0, 200), text: response.text, toolCalls: response.toolCalls?.map(t => t.name), finishReason: response.finishReason }));
       let iterations = 0;
 
       // Emit initial thinking if Gemini provided any reasoning
-      console.log(`[ClaimsInvestigationAgent] Initial response - text: ${response.text ? response.text.substring(0, 100) + '...' : 'NONE'}, toolCalls: ${response.toolCalls?.length || 0}`);
-      if (response.text) {
-        console.log(`[ClaimsInvestigationAgent] Emitting initial thinking: ${response.text.substring(0, 100)}...`);
+      console.log(`[ClaimsInvestigationAgent] Initial response - thinking: ${response.thinking ? response.thinking.substring(0, 100) + '...' : 'NONE'}, text: ${response.text ? response.text.substring(0, 100) + '...' : 'NONE'}, toolCalls: ${response.toolCalls?.length || 0}`);
+
+      // Prefer thinking content (from thinking-enabled models), fall back to text
+      const thinkingContent = response.thinking || response.text;
+      if (thinkingContent) {
+        console.log(`[ClaimsInvestigationAgent] Emitting initial thinking: ${thinkingContent.substring(0, 100)}...`);
         publishStructuredEvent(eventBus, taskId, contextId, {
           type: 'thinking',
           agent: 'investigation',
-          text: response.text,
+          text: thinkingContent,
         });
       }
 
@@ -185,12 +188,13 @@ export class ClaimsInvestigationAgent implements AgentExecutor {
         response = await gemini.sendToolResults(toolResults);
 
         // Emit thinking if Gemini provided any reasoning after processing tools
-        if (response.text && response.toolCalls && response.toolCalls.length > 0) {
-          console.log(`[ClaimsInvestigationAgent] Emitting intermediate thinking: ${response.text.substring(0, 100)}...`);
+        const intermediateThinking = response.thinking || response.text;
+        if (intermediateThinking && response.toolCalls && response.toolCalls.length > 0) {
+          console.log(`[ClaimsInvestigationAgent] Emitting intermediate thinking: ${intermediateThinking.substring(0, 100)}...`);
           publishStructuredEvent(eventBus, taskId, contextId, {
             type: 'thinking',
             agent: 'investigation',
-            text: response.text,
+            text: intermediateThinking,
           });
         }
       }

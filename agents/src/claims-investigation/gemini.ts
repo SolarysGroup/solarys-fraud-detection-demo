@@ -75,6 +75,7 @@ const toolDefinitions: FunctionDeclaration[] = [
 
 export interface GeminiResponse {
   text: string;
+  thinking?: string;
   toolCalls?: { name: string; args: Record<string, unknown> }[];
   finishReason: string;
 }
@@ -90,8 +91,15 @@ export class GeminiClient {
 
     const genAI = new GoogleGenerativeAI(config.googleApiKey);
     this.model = genAI.getGenerativeModel({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-2.5-flash-preview-05-20',
       tools: [{ functionDeclarations: toolDefinitions }],
+      generationConfig: {
+        // Enable thinking for this model
+        // @ts-expect-error - thinkingConfig not in types yet
+        thinkingConfig: {
+          thinkingBudget: 2048,
+        },
+      },
       systemInstruction: `You are a Claims Investigation Agent for the Solarys healthcare fraud detection platform.
 
 Your role is to conduct thorough investigations into flagged healthcare providers, explain risk assessments, and help analysts understand fraud patterns.
@@ -118,7 +126,16 @@ Always provide clear, professional analysis suitable for compliance review. Cite
     }
 
     const parts = candidate.content.parts;
-    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p);
+
+    // Extract thinking parts (from thinking-enabled models)
+    // @ts-expect-error - thought property not in types yet
+    const thoughtParts = parts.filter((p) => 'thought' in p && p.thought === true);
+    // @ts-expect-error - thought property not in types yet
+    const thinkingText = thoughtParts.map((p) => p.text).join('');
+
+    // Extract regular text parts (non-thinking)
+    // @ts-expect-error - thought property not in types yet
+    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && p.thought === true));
     const functionCallParts = parts.filter((p): p is Part & { functionCall: { name: string; args: Record<string, unknown> } } => 'functionCall' in p);
 
     const toolCalls = functionCallParts.map((p) => ({
@@ -126,8 +143,11 @@ Always provide clear, professional analysis suitable for compliance review. Cite
       args: p.functionCall.args,
     }));
 
+    console.log(`[GeminiClient] Response parts - thinking: ${thinkingText.length} chars, text: ${textParts.length} parts, tools: ${toolCalls.length}`);
+
     return {
       text: textParts.map((p) => p.text).join(''),
+      thinking: thinkingText || undefined,
       toolCalls: toolCalls.length > 0 ? toolCalls : undefined,
       finishReason: candidate.finishReason || 'STOP',
     };
@@ -151,7 +171,16 @@ Always provide clear, professional analysis suitable for compliance review. Cite
     }
 
     const parts = candidate.content.parts;
-    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p);
+
+    // Extract thinking parts (from thinking-enabled models)
+    // @ts-expect-error - thought property not in types yet
+    const thoughtParts = parts.filter((p) => 'thought' in p && p.thought === true);
+    // @ts-expect-error - thought property not in types yet
+    const thinkingText = thoughtParts.map((p) => p.text).join('');
+
+    // Extract regular text parts (non-thinking)
+    // @ts-expect-error - thought property not in types yet
+    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && p.thought === true));
     const functionCallParts = parts.filter((p): p is Part & { functionCall: { name: string; args: Record<string, unknown> } } => 'functionCall' in p);
 
     const toolCalls = functionCallParts.map((p) => ({
@@ -159,8 +188,11 @@ Always provide clear, professional analysis suitable for compliance review. Cite
       args: p.functionCall.args,
     }));
 
+    console.log(`[GeminiClient] Tool response parts - thinking: ${thinkingText.length} chars, text: ${textParts.length} parts, tools: ${toolCalls.length}`);
+
     return {
       text: textParts.map((p) => p.text).join(''),
+      thinking: thinkingText || undefined,
       toolCalls: toolCalls.length > 0 ? toolCalls : undefined,
       finishReason: candidate.finishReason || 'STOP',
     };
