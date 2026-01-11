@@ -6,7 +6,7 @@ import { resolve } from "path";
 config({ path: resolve(import.meta.dirname, "../../.env") });
 
 const nextConfig: NextConfig = {
-  basePath: "/mcp-a2a",
+  basePath: "/mcpa2a",
   transpilePackages: ["@solarys/types"],
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
