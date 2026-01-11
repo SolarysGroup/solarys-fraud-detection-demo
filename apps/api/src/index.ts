@@ -15,6 +15,7 @@ import toolsRouter from "./routes/tools.js";
 import chatRouter from "./routes/chat.js";
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT ?? 3001;
 
 // Rate limiting for chat endpoint (5 requests per IP per hour)

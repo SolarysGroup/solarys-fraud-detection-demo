@@ -36,6 +36,7 @@ async function main() {
 
   // 4. Setup Express with A2A routes
   const app = express();
+  app.set("trust proxy", 1);
 
   // Agent card discovery endpoint
   app.use(`/${AGENT_CARD_PATH}`, agentCardHandler({ agentCardProvider: requestHandler }));
