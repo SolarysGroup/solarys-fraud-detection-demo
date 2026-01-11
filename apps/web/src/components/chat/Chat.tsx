@@ -79,12 +79,14 @@ export function Chat() {
 
       if (!response.ok) {
         // Try to get error message from response body
+        let errorMessage = `HTTP error: ${response.status}`;
         try {
           const errorData = await response.json();
-          throw new Error(errorData.message || errorData.error || `HTTP error: ${response.status}`);
+          errorMessage = errorData.message || errorData.error || errorMessage;
         } catch {
-          throw new Error(`HTTP error: ${response.status}`);
+          // Response wasn't JSON, use default message
         }
+        throw new Error(errorMessage);
       }
 
       const reader = response.body?.getReader();
