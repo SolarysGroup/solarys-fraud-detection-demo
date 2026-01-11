@@ -20,11 +20,21 @@ export const config = {
   },
 
   // Agent URLs (for Railway/production - use full URLs instead of localhost)
+  // These are used by OTHER services to call this agent
   get detectionAgentUrl() {
     return process.env.DETECTION_AGENT_URL || `http://localhost:${this.detectionAgentPort}`;
   },
   get investigationAgentUrl() {
     return process.env.INVESTIGATION_AGENT_URL || `http://localhost:${this.investigationAgentPort}`;
+  },
+
+  // Public URLs for agent cards (what the agent advertises as its own URL)
+  // On Railway, set these to the public URLs of the services
+  get detectionAgentPublicUrl() {
+    return process.env.DETECTION_AGENT_PUBLIC_URL || `http://localhost:${this.detectionAgentPort}`;
+  },
+  get investigationAgentPublicUrl() {
+    return process.env.INVESTIGATION_AGENT_PUBLIC_URL || `http://localhost:${this.investigationAgentPort}`;
   },
 
   // LLM API keys

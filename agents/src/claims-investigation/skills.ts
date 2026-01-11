@@ -4,7 +4,7 @@ import { config } from '../shared/config.js';
 export const investigationAgentCard: AgentCard = {
   name: 'Claims Investigation Agent',
   description: 'Conducts deep-dive investigations into flagged healthcare providers, explains risk assessments, and generates comprehensive investigation reports.',
-  url: `http://localhost:${config.investigationAgentPort}/a2a/jsonrpc`,
+  url: `${config.investigationAgentPublicUrl}/a2a/jsonrpc`,
   provider: {
     organization: 'Solarys',
     url: 'https://solarys.ai',
@@ -17,8 +17,8 @@ export const investigationAgentCard: AgentCard = {
     stateTransitionHistory: true,
   },
   additionalInterfaces: [
-    { url: `http://localhost:${config.investigationAgentPort}/a2a/jsonrpc`, transport: 'JSONRPC' as const },
-    { url: `http://localhost:${config.investigationAgentPort}/a2a/rest`, transport: 'HTTP+JSON' as const },
+    { url: `${config.investigationAgentPublicUrl}/a2a/jsonrpc`, transport: 'JSONRPC' as const },
+    { url: `${config.investigationAgentPublicUrl}/a2a/rest`, transport: 'HTTP+JSON' as const },
   ],
   defaultInputModes: ['text'],
   defaultOutputModes: ['text', 'task-status'],

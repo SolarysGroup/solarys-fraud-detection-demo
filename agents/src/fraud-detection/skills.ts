@@ -4,7 +4,7 @@ import { config } from '../shared/config.js';
 export const fraudDetectionAgentCard: AgentCard = {
   name: 'Fraud Detection Agent',
   description: 'Analyzes healthcare claims for fraud patterns, anomalies, and suspicious provider behavior.',
-  url: `http://localhost:${config.detectionAgentPort}/a2a/jsonrpc`,
+  url: `${config.detectionAgentPublicUrl}/a2a/jsonrpc`,
   provider: {
     organization: 'Solarys',
     url: 'https://solarys.ai',
