@@ -4,7 +4,7 @@ import { config as dotenvConfig } from 'dotenv';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
-// Load .env from monorepo root
+// Load .env from monorepo root (only needed for local dev - Railway sets env vars directly)
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const envPath = resolve(__dirname, '../../../.env');
 console.log('[MCP Server] Loading .env from:', envPath);
@@ -20,7 +20,9 @@ import {
   type CallToolRequest,
   type CallToolResult,
 } from "@modelcontextprotocol/sdk/types.js";
-import { tools, logToolCall } from "@solarys/tools";
+
+// Dynamic import to ensure DATABASE_URL is loaded before Prisma client is created
+const { tools, logToolCall } = await import("@solarys/tools");
 
 // Railway provides PORT env var - use it, otherwise fall back to MCP_SERVER_PORT or default
 const MCP_PORT = parseInt(process.env.PORT || process.env.MCP_SERVER_PORT || '3004', 10);
