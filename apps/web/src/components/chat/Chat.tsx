@@ -78,7 +78,13 @@ export function Chat() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
+        // Try to get error message from response body
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.message || errorData.error || `HTTP error: ${response.status}`);
+        } catch {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
       }
 
       const reader = response.body?.getReader();
