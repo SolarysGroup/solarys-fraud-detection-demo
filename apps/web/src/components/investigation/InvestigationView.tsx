@@ -80,8 +80,9 @@ export function InvestigationView() {
               <InvestigationReport result={selectedInvestigation} />
             </div>
           )}
-          {/* LiveInvestigation stays mounted to preserve tool calls/reasoning */}
+          {/* LiveInvestigation uses key to remount when provider changes */}
           <LiveInvestigation
+            key={activeInvestigation}
             providerId={activeInvestigation}
             onComplete={handleInvestigationComplete}
           />
