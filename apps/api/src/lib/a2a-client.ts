@@ -155,8 +155,11 @@ export async function* sendToDetectionAgent(userMessage: string): AsyncGenerator
           const structured = parseStructuredEvent(text);
 
           if (structured) {
+            console.log(`[A2A-Client] Parsed structured event: ${structured.type}, agent: ${structured.agent || 'detection'}`);
+
             // Handle structured events
             if (structured.type === 'mcp_tool') {
+              console.log(`[A2A-Client] Yielding mcp_tool event for ${structured.agent || 'detection'}: ${structured.tool}`);
               yield {
                 type: 'mcp_tool',
                 agent: (structured.agent as 'detection' | 'investigation') || 'detection',
@@ -166,6 +169,7 @@ export async function* sendToDetectionAgent(userMessage: string): AsyncGenerator
                 success: structured.success as boolean | undefined,
               };
             } else if (structured.type === 'a2a_delegation') {
+              console.log(`[A2A-Client] Yielding a2a_delegation event: ${structured.from} -> ${structured.to}`);
               yield {
                 type: 'a2a_delegation',
                 from: structured.from as 'detection' | 'investigation',
@@ -179,6 +183,7 @@ export async function* sendToDetectionAgent(userMessage: string): AsyncGenerator
                 status: 'working',
               };
             } else if (structured.type === 'agent_active') {
+              console.log(`[A2A-Client] Yielding agent_active event for ${structured.agent}: ${structured.status}`);
               yield {
                 type: 'agent_active',
                 agent: structured.agent as 'detection' | 'investigation',
@@ -186,11 +191,14 @@ export async function* sendToDetectionAgent(userMessage: string): AsyncGenerator
                 status: structured.status as 'working' | 'completed' | 'idle',
               };
             } else if (structured.type === 'thinking') {
+              console.log(`[A2A-Client] Yielding thinking event for ${structured.agent}`);
               yield {
                 type: 'thinking',
                 agent: structured.agent as 'detection' | 'investigation',
                 text: structured.text as string,
               };
+            } else {
+              console.log(`[A2A-Client] Unknown structured event type: ${structured.type}`);
             }
           } else if (text && !text.startsWith('{')) {
             // Regular text message - only yield non-empty, non-JSON text

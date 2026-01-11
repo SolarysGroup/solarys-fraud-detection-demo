@@ -75,6 +75,8 @@ router.post("/", async (req, res) => {
 
     // Stream events from the Detection Agent
     for await (const event of sendToDetectionAgent(combinedMessage)) {
+      console.log(`[Chat Route] Forwarding event to frontend: ${event.type}`, event.type === 'agent_active' ? `${event.agent}:${event.status}` : '');
+
       // Forward A2A events to the frontend as SSE
       switch (event.type) {
         case 'agent_active':
@@ -86,6 +88,7 @@ router.post("/", async (req, res) => {
           break;
 
         case 'mcp_tool':
+          console.log(`[Chat Route] mcp_tool event: ${event.agent} - ${event.tool} (${event.status})`);
           sendEvent('mcp_tool', {
             agent: event.agent,
             tool: event.tool,
@@ -96,6 +99,7 @@ router.post("/", async (req, res) => {
           break;
 
         case 'a2a_delegation':
+          console.log(`[Chat Route] a2a_delegation event: ${event.from} -> ${event.to}`);
           sendEvent('a2a_delegation', {
             from: event.from,
             to: event.to,
@@ -103,6 +107,7 @@ router.post("/", async (req, res) => {
           break;
 
         case 'thinking':
+          console.log(`[Chat Route] thinking event from ${event.agent}`);
           sendEvent('thinking', {
             agent: event.agent,
             text: event.text,

@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://solarys.ai"),
+  metadataBase: new URL("https://labs.solarys.ai/mcpa2a"),
   title: "Solarys Fraud Detection Demo",
   description: "MCP-compliant AI fraud detection system with multi-agent orchestration for real-time transaction analysis",
   icons: { icon: "/solaryslogo.svg", apple: "/solaryslogo.svg" },
   openGraph: {
     title: "Solarys Fraud Detection Demo",
     description: "MCP-compliant AI fraud detection system with multi-agent orchestration for real-time transaction analysis",
-    url: "https://solarys.ai",
+    url: "https://labs.solarys.ai/mcpa2a",
     type: "website",
     siteName: "Solarys",
     images: [

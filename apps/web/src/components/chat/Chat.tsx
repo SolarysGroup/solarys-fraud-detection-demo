@@ -107,10 +107,12 @@ export function Chat() {
             const data = line.slice(6);
             try {
               const parsed = JSON.parse(data);
+              console.log('[Chat] SSE event received:', parsed);
 
               // Handle agent_active events
               if ("agent" in parsed && "vendor" in parsed && "status" in parsed && !("tool" in parsed)) {
                 const agentId = parsed.agent as AgentId;
+                console.log(`[Chat] agent_active: ${agentId} -> ${parsed.status}`);
                 setAgents((prev) => ({
                   ...prev,
                   [agentId]: {
@@ -123,6 +125,7 @@ export function Chat() {
               // Handle mcp_tool events
               else if ("tool" in parsed && "status" in parsed) {
                 const agentId = (parsed.agent as AgentId) || "detection";
+                console.log(`[Chat] mcp_tool: ${agentId} - ${parsed.tool} (${parsed.status})`);
 
                 if (parsed.status === "start") {
                   const newToolCall: ToolCall = {
@@ -159,6 +162,7 @@ export function Chat() {
               }
               // Handle thinking events (has agent and text, but not tool)
               else if ("agent" in parsed && "text" in parsed && !("tool" in parsed)) {
+                console.log(`[Chat] thinking: ${parsed.agent}`);
                 const thought: ThinkingEntry = {
                   id: crypto.randomUUID(),
                   agent: parsed.agent as AgentId,
