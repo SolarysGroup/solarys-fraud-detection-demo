@@ -22,7 +22,8 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { tools, logToolCall } from "@solarys/tools";
 
-const MCP_PORT = parseInt(process.env.MCP_SERVER_PORT || '3004', 10);
+// Railway provides PORT env var - use it, otherwise fall back to MCP_SERVER_PORT or default
+const MCP_PORT = parseInt(process.env.PORT || process.env.MCP_SERVER_PORT || '3004', 10);
 
 // Helper to convert tool result to MCP format
 function toMcpResult(result: { success: boolean; data?: unknown; error?: string }): CallToolResult {
@@ -246,8 +247,8 @@ async function main() {
     });
   });
 
-  app.listen(MCP_PORT, () => {
-    console.log(`[MCP Server] Running on http://localhost:${MCP_PORT}`);
+  app.listen(MCP_PORT, '0.0.0.0', () => {
+    console.log(`[MCP Server] Running on http://0.0.0.0:${MCP_PORT}`);
     console.log(`[MCP Server] MCP endpoint: http://localhost:${MCP_PORT}/mcp`);
     console.log(`[MCP Server] Health check: http://localhost:${MCP_PORT}/health`);
     console.log(`[MCP Server] Tools list: http://localhost:${MCP_PORT}/tools`);

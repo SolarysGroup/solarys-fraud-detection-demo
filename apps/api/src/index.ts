@@ -40,8 +40,8 @@ app.use("/api/chat", chatLimiter, chatRouter);
 // Error handling
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
+app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`API server running on http://0.0.0.0:${PORT}`);
 });
 
 export default app;

@@ -56,9 +56,10 @@ async function main() {
   app.use('/task', restHandler(restConfig));     // SDK calls /task/:id
 
   // 5. Start server
-  const port = config.investigationAgentPort;
-  app.listen(port, () => {
-    console.log(`[ClaimsInvestigationAgent] Server started on http://localhost:${port}`);
+  // Railway provides PORT env var - use it, otherwise fall back to config
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : config.investigationAgentPort;
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`[ClaimsInvestigationAgent] Server started on http://0.0.0.0:${port}`);
     console.log(`[ClaimsInvestigationAgent] Agent Card: http://localhost:${port}/${AGENT_CARD_PATH}`);
     console.log(`[ClaimsInvestigationAgent] JSON-RPC: http://localhost:${port}/a2a/jsonrpc`);
     console.log(`[ClaimsInvestigationAgent] REST: http://localhost:${port}/a2a/rest`);
