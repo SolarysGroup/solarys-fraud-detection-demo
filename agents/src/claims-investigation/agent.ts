@@ -107,8 +107,11 @@ export class ClaimsInvestigationAgent implements AgentExecutor {
 
     try {
       // 4. Initialize Gemini client and run agentic loop
+      console.log(`[ClaimsInvestigationAgent] ========== CALLING GEMINI ==========`);
       const gemini = new GeminiClient();
       let response = await gemini.sendMessage(query);
+      console.log(`[ClaimsInvestigationAgent] ========== GEMINI RESPONDED ==========`);
+      console.log(`[ClaimsInvestigationAgent] Full response:`, JSON.stringify({ text: response.text, toolCalls: response.toolCalls?.map(t => t.name), finishReason: response.finishReason }));
       let iterations = 0;
 
       // Emit initial thinking if Gemini provided any reasoning
