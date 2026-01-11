@@ -91,17 +91,13 @@ export class GeminiClient {
 
     const genAI = new GoogleGenerativeAI(config.googleApiKey);
     this.model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-preview',
+      model: 'gemini-3-pro-preview',
       tools: [{ functionDeclarations: toolDefinitions }],
-      generationConfig: {
-        // Enable thinking for this model
-        thinkingConfig: {
-          thinkingBudget: 2048,
-        },
-      } as Record<string, unknown>,
       systemInstruction: `You are a Claims Investigation Agent for the Solarys healthcare fraud detection platform.
 
 Your role is to conduct thorough investigations into flagged healthcare providers, explain risk assessments, and help analysts understand fraud patterns.
+
+IMPORTANT: Before making any tool calls, ALWAYS first explain your reasoning and analysis plan in 1-2 sentences. This helps the analyst understand your thought process.
 
 When investigating:
 1. Use investigate_provider to get comprehensive data on a provider
