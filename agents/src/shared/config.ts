@@ -11,12 +11,20 @@ export const config = {
     return process.env.MCP_SERVER_URL || 'http://localhost:3004';
   },
 
-  // Agent ports
+  // Agent ports (for local development)
   get detectionAgentPort() {
     return parseInt(process.env.DETECTION_AGENT_PORT || '3002', 10);
   },
   get investigationAgentPort() {
     return parseInt(process.env.INVESTIGATION_AGENT_PORT || '3003', 10);
+  },
+
+  // Agent URLs (for Railway/production - use full URLs instead of localhost)
+  get detectionAgentUrl() {
+    return process.env.DETECTION_AGENT_URL || `http://localhost:${this.detectionAgentPort}`;
+  },
+  get investigationAgentUrl() {
+    return process.env.INVESTIGATION_AGENT_URL || `http://localhost:${this.investigationAgentPort}`;
   },
 
   // LLM API keys

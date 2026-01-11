@@ -38,6 +38,11 @@ async function main() {
   const app = express();
   app.set("trust proxy", 1);
 
+  // Health check endpoint for Railway
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', agent: 'claims-investigation' });
+  });
+
   // Agent card discovery endpoint
   app.use(`/${AGENT_CARD_PATH}`, agentCardHandler({ agentCardProvider: requestHandler }));
 

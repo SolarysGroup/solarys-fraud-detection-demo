@@ -66,7 +66,7 @@ function extractResponseText(result: Task | Message): string {
  * Delegates requests to the Claims Investigation Agent via A2A protocol
  */
 export async function callInvestigationAgent(request: string): Promise<string> {
-  const investigationAgentUrl = `http://localhost:${config.investigationAgentPort}`;
+  const investigationAgentUrl = config.investigationAgentUrl;
 
   console.log(`[A2A-Client] Delegating to Investigation Agent at ${investigationAgentUrl}`);
   console.log(`[A2A-Client] Request: ${request}`);
@@ -110,7 +110,7 @@ export async function callInvestigationAgentWithEvents(
   taskId: string,
   contextId: string
 ): Promise<string> {
-  const investigationAgentUrl = `http://localhost:${config.investigationAgentPort}`;
+  const investigationAgentUrl = config.investigationAgentUrl;
 
   console.log(`[A2A-Client] Delegating to Investigation Agent at ${investigationAgentUrl}`);
   console.log(`[A2A-Client] Request: ${request}`);
