@@ -111,8 +111,10 @@ export class ClaimsInvestigationAgent implements AgentExecutor {
       let response = await gemini.sendMessage(query);
       let iterations = 0;
 
-      // Emit initial thinking if Gemini provided reasoning before tools
-      if (response.text && response.toolCalls && response.toolCalls.length > 0) {
+      // Emit initial thinking if Gemini provided any reasoning
+      console.log(`[ClaimsInvestigationAgent] Initial response - text: ${response.text ? response.text.substring(0, 100) + '...' : 'NONE'}, toolCalls: ${response.toolCalls?.length || 0}`);
+      if (response.text) {
+        console.log(`[ClaimsInvestigationAgent] Emitting initial thinking: ${response.text.substring(0, 100)}...`);
         publishStructuredEvent(eventBus, taskId, contextId, {
           type: 'thinking',
           agent: 'investigation',
@@ -179,8 +181,9 @@ export class ClaimsInvestigationAgent implements AgentExecutor {
         // Send results back to Gemini
         response = await gemini.sendToolResults(toolResults);
 
-        // Emit thinking if Gemini provided reasoning after processing tools
+        // Emit thinking if Gemini provided any reasoning after processing tools
         if (response.text && response.toolCalls && response.toolCalls.length > 0) {
+          console.log(`[ClaimsInvestigationAgent] Emitting intermediate thinking: ${response.text.substring(0, 100)}...`);
           publishStructuredEvent(eventBus, taskId, contextId, {
             type: 'thinking',
             agent: 'investigation',

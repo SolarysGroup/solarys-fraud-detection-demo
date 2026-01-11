@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://labs.solarys.ai/mcpa2a"),
   title: "Solarys Fraud Detection Demo",
   description: "MCP-compliant AI fraud detection system with multi-agent orchestration for real-time transaction analysis",
-  icons: { icon: "/solaryslogo.svg", apple: "/solaryslogo.svg" },
+  icons: { icon: "/mcpa2a/solaryslogo.svg", apple: "/mcpa2a/solaryslogo.svg" },
   openGraph: {
     title: "Solarys Fraud Detection Demo",
     description: "MCP-compliant AI fraud detection system with multi-agent orchestration for real-time transaction analysis",

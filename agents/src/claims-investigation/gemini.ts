@@ -90,7 +90,7 @@ export class GeminiClient {
 
     const genAI = new GoogleGenerativeAI(config.googleApiKey);
     this.model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3-pro-preview',
       tools: [{ functionDeclarations: toolDefinitions }],
       systemInstruction: `You are a Claims Investigation Agent for the Solarys healthcare fraud detection platform.
 
