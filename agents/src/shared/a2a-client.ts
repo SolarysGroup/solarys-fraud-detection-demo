@@ -160,6 +160,7 @@ export async function callInvestigationAgentWithEvents(
             try {
               const parsed = JSON.parse(textPart.text);
               if (parsed && typeof parsed === 'object' && 'type' in parsed) {
+                console.log(`[A2A-Client] Forwarding Investigation Agent event: ${parsed.type}`);
                 // Forward structured events from Investigation Agent
                 // Update the agent field to ensure it's marked as investigation
                 if (parsed.type === 'mcp_tool') {
@@ -173,6 +174,7 @@ export async function callInvestigationAgentWithEvents(
               }
             } catch {
               // Not a structured event, might be progress text
+              console.log(`[A2A-Client] Non-JSON event from Investigation Agent`);
             }
           }
         }
