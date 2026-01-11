@@ -95,11 +95,10 @@ export class GeminiClient {
       tools: [{ functionDeclarations: toolDefinitions }],
       generationConfig: {
         // Enable thinking for this model
-        // @ts-expect-error - thinkingConfig not in types yet
         thinkingConfig: {
           thinkingBudget: 2048,
         },
-      },
+      } as Record<string, unknown>,
       systemInstruction: `You are a Claims Investigation Agent for the Solarys healthcare fraud detection platform.
 
 Your role is to conduct thorough investigations into flagged healthcare providers, explain risk assessments, and help analysts understand fraud patterns.
@@ -128,14 +127,11 @@ Always provide clear, professional analysis suitable for compliance review. Cite
     const parts = candidate.content.parts;
 
     // Extract thinking parts (from thinking-enabled models)
-    // @ts-expect-error - thought property not in types yet
-    const thoughtParts = parts.filter((p) => 'thought' in p && p.thought === true);
-    // @ts-expect-error - thought property not in types yet
+    const thoughtParts = parts.filter((p): p is Part & { text: string; thought: boolean } => 'thought' in p && (p as unknown as { thought?: boolean }).thought === true);
     const thinkingText = thoughtParts.map((p) => p.text).join('');
 
     // Extract regular text parts (non-thinking)
-    // @ts-expect-error - thought property not in types yet
-    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && p.thought === true));
+    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && (p as unknown as { thought?: boolean }).thought === true));
     const functionCallParts = parts.filter((p): p is Part & { functionCall: { name: string; args: Record<string, unknown> } } => 'functionCall' in p);
 
     const toolCalls = functionCallParts.map((p) => ({
@@ -173,14 +169,11 @@ Always provide clear, professional analysis suitable for compliance review. Cite
     const parts = candidate.content.parts;
 
     // Extract thinking parts (from thinking-enabled models)
-    // @ts-expect-error - thought property not in types yet
-    const thoughtParts = parts.filter((p) => 'thought' in p && p.thought === true);
-    // @ts-expect-error - thought property not in types yet
+    const thoughtParts = parts.filter((p): p is Part & { text: string; thought: boolean } => 'thought' in p && (p as unknown as { thought?: boolean }).thought === true);
     const thinkingText = thoughtParts.map((p) => p.text).join('');
 
     // Extract regular text parts (non-thinking)
-    // @ts-expect-error - thought property not in types yet
-    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && p.thought === true));
+    const textParts = parts.filter((p): p is Part & { text: string } => 'text' in p && !('thought' in p && (p as unknown as { thought?: boolean }).thought === true));
     const functionCallParts = parts.filter((p): p is Part & { functionCall: { name: string; args: Record<string, unknown> } } => 'functionCall' in p);
 
     const toolCalls = functionCallParts.map((p) => ({
