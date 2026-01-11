@@ -76,7 +76,14 @@ export function LiveInvestigation({ providerId, onComplete }: LiveInvestigationP
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
+        let errorMessage = `HTTP error: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // Response wasn't JSON, use default message
+        }
+        throw new Error(errorMessage);
       }
 
       const reader = response.body?.getReader();
