@@ -32,6 +32,11 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Root route for Railway health check (default path)
+app.get("/", (_req, res) => {
+  res.json({ status: "ok", service: "api" });
+});
+
 // Routes
 app.use("/health", healthRouter);
 app.use("/api/tools", toolsRouter);

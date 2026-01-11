@@ -232,6 +232,11 @@ async function main() {
     }
   });
 
+  // Root route for Railway health check (default path)
+  app.get('/', (req, res) => {
+    res.json({ status: 'ok', service: 'mcp-server' });
+  });
+
   // Health check endpoint
   app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'mcp-server', transport: 'http' });

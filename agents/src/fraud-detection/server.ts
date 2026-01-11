@@ -38,6 +38,11 @@ async function main() {
   const app = express();
   app.set("trust proxy", 1);
 
+  // Root route for Railway health check (default path)
+  app.get('/', (_req, res) => {
+    res.json({ status: 'ok', agent: 'fraud-detection', service: 'a2a' });
+  });
+
   // Health check endpoint for Railway
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', agent: 'fraud-detection' });
