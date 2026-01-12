@@ -23,6 +23,19 @@ const config: Config = {
         "3xl": "0",
         full: "0",
       },
+      animation: {
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+      },
+      keyframes: {
+        "pulse-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 3px rgba(255, 255, 255, 0.1)",
+          },
+          "50%": {
+            boxShadow: "0 0 8px rgba(255, 255, 255, 0.25)",
+          },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

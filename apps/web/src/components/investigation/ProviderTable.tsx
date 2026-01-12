@@ -23,6 +23,8 @@ export function ProviderTable({
   onInvestigate,
   isInvestigating,
 }: ProviderTableProps) {
+  // Find the first uninvestigated provider for the pulsing CTA
+  const firstUninvestigatedId = providers.find(p => !p.investigated)?.id;
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -57,6 +59,7 @@ export function ProviderTable({
                   onSelect={() => onSelectProvider(provider.id)}
                   onInvestigate={() => onInvestigate(provider.id)}
                   isInvestigating={isInvestigating && provider.id === selectedProviderId}
+                  shouldPulse={provider.id === firstUninvestigatedId && !isInvestigating}
                 />
               ))}
             </tbody>
@@ -73,6 +76,7 @@ interface ProviderRowProps {
   onSelect: () => void;
   onInvestigate: () => void;
   isInvestigating: boolean;
+  shouldPulse: boolean;
 }
 
 function ProviderRow({
@@ -81,6 +85,7 @@ function ProviderRow({
   onSelect,
   onInvestigate,
   isInvestigating,
+  shouldPulse,
 }: ProviderRowProps) {
   const getRiskBadge = () => {
     switch (provider.riskLevel) {
@@ -139,7 +144,10 @@ function ProviderRow({
               onInvestigate();
             }}
             disabled={isInvestigating}
-            className="gap-1"
+            className={cn(
+              "gap-1",
+              shouldPulse && "animate-pulse-glow border-zinc-400/50 bg-zinc-800/50 text-zinc-100 hover:bg-zinc-700/50 hover:text-white"
+            )}
           >
             <Search className="h-3 w-3" />
             {isInvestigating ? "Investigating..." : "Investigate"}

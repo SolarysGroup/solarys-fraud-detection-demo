@@ -1,7 +1,8 @@
 {
   "name": "solarys-fraud-detection-demo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
+  "description": "Multi-agent fraud detection demo using Claude and Gemini over MCP and A2A protocols",
   "workspaces": [
     "apps/*",
     "packages/*",
