@@ -29,10 +29,10 @@ const config: Config = {
       keyframes: {
         "pulse-glow": {
           "0%, 100%": {
-            boxShadow: "0 0 3px rgba(255, 255, 255, 0.1)",
+            boxShadow: "0 0 4px rgba(255, 255, 255, 0.15)",
           },
           "50%": {
-            boxShadow: "0 0 8px rgba(255, 255, 255, 0.25)",
+            boxShadow: "0 0 12px rgba(255, 255, 255, 0.4)",
           },
         },
       },
