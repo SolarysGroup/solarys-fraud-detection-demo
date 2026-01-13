@@ -267,7 +267,7 @@ export default function TRSDemoPage() {
               className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
             >
               <Image
-                src="/solarys-logo.svg"
+                src="/mcpa2a/solaryslogo.svg"
                 alt="Solarys"
                 width={20}
                 height={20}
