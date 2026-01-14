@@ -55,7 +55,7 @@ export default function TRSDemoPage() {
                   See Capabilities
                 </Button>
                 <a
-                  href="https://github.com/BizBeams/solarys-fraud-detection-demo"
+                  href="https://github.com/SolarysGroup/solarys-fraud-detection-demo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center h-9 px-4 py-2 text-sm font-medium border border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800 transition-colors"
@@ -277,7 +277,7 @@ export default function TRSDemoPage() {
             </a>
             <div className="flex gap-6 text-sm">
               <a
-                href="https://github.com/BizBeams/solarys-fraud-detection-demo#architecture"
+                href="https://github.com/SolarysGroup/solarys-fraud-detection-demo#architecture"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-zinc-500 hover:text-zinc-300 flex items-center gap-1"
@@ -286,7 +286,7 @@ export default function TRSDemoPage() {
                 <ExternalLink className="h-3 w-3" />
               </a>
               <a
-                href="https://github.com/BizBeams/solarys-fraud-detection-demo"
+                href="https://github.com/SolarysGroup/solarys-fraud-detection-demo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-zinc-500 hover:text-zinc-300 flex items-center gap-1"
