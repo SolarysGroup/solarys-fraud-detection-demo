@@ -23,27 +23,14 @@ export default function TRSDemoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text Content */}
             <div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="info">
-                  MCP-Compliant
-                </Badge>
-                <Badge variant="success">
-                  A2A Protocol
-                </Badge>
-                <Badge variant="outline" className="border-zinc-700">
-                  Multi-Vendor
-                </Badge>
-              </div>
+              <p className="text-base text-zinc-500 uppercase tracking-widest font-medium mb-4">
+                Labs
+              </p>
               <h1 className="text-4xl font-bold tracking-tight mb-4">
                 Solarys Fraud Detection Demo
               </h1>
-              <p className="text-xl text-zinc-400 mb-6">
-                AI-powered healthcare fraud investigation with Claude and Gemini working together via A2A protocol.
-              </p>
-              <p className="text-zinc-500 mb-8">
-                Watch two AI agents collaborate: Claude (Anthropic) orchestrates 9 MCP tools
-                and delegates deep investigations to Gemini (Google) via the A2A protocol.
-                See protocol-compliant multi-vendor AI in action.
+              <p className="text-xl text-zinc-400 mb-8">
+                A fraud investigation system running against 558K healthcare claims, with Claude and Gemini sharing the same detection tools via MCP and coordinating investigations through A2A.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="primary" onClick={scrollToDemo}>
