@@ -179,63 +179,54 @@ export default function TRSDemoPage() {
             <ToolCard
               name="find_anomalies"
               description="Detects statistical outliers by comparing each provider's claim volume and reimbursement totals against system-wide baselines. Uses configurable threshold (0-1) to control sensitivity. Returns severity-ranked anomalies with deviation metrics showing how far each provider deviates from normal patterns."
-              agent="detection"
               params={["threshold: number (0-1)"]}
               returns={["anomalyId", "severity (medium/high/critical)", "deviationMultiplier", "metrics breakdown"]}
             />
             <ToolCard
               name="detect_fraud_rings"
               description="Identifies coordinated fraud by finding clusters of providers who share an unusually high number of beneficiaries. Uses union-find algorithm to group connected providers into rings. Calculates risk based on flagged member rate, combined reimbursement, and pattern strength."
-              agent="detection"
               params={["minSharedBeneficiaries: number (default: 10)"]}
               returns={["ringId", "members[]", "sharedBeneficiaryCount", "flaggedMemberRate", "riskLevel"]}
             />
             <ToolCard
               name="check_deceased_claims"
               description="Queries claims database for billing submitted after a beneficiary's recorded date of death—a primary fraud indicator. Returns claim details including days after death elapsed and amounts. Can filter by specific provider or scan system-wide."
-              agent="detection"
               params={["providerId?: string (optional filter)"]}
               returns={["claimId", "dateOfDeath", "claimDate", "daysAfterDeath", "claimAmount"]}
             />
             <ToolCard
               name="get_provider_stats"
               description="Retrieves comprehensive statistics for a single provider including claim counts, reimbursement totals, and deviation ratios vs. system baselines. Calculates risk score (0-1) based on multiple factors and identifies specific risk indicators like high volume or deceased claims."
-              agent="detection"
               params={["providerId: string"]}
               returns={["totalClaims", "totalReimbursement", "riskScore", "deviationFromBaseline", "riskIndicators[]"]}
             />
             <ToolCard
               name="delegate_investigation"
               description="A2A protocol bridge that hands off complex investigations to the Gemini-powered Investigation Agent. Packages case context and transfers control for deep analysis. Enables multi-vendor AI collaboration within a single workflow."
-              agent="a2a"
               params={["providerId: string", "context: object"]}
               returns={["Investigation Agent response via A2A"]}
             />
             <ToolCard
               name="investigate_provider"
               description="Runs comprehensive multi-factor fraud analysis on a single provider. Combines baseline deviation analysis, deceased claims check, network analysis for fraud ring connections, and generates natural language summary with confidence score. Produces compliance-ready report with recommended actions."
-              agent="investigation"
               params={["providerId: string"]}
               returns={["overallRiskLevel", "confidenceScore", "summary", "riskIndicators[]", "deceasedClaimsAnalysis", "networkAnalysis", "recommendedActions[]"]}
             />
             <ToolCard
               name="explain_risk_score"
               description="Generates detailed, plain-English explanation of why a provider received their risk level. Breaks down each contributing factor (claim volume, reimbursement, deceased claims, historical flags) with specific point values. Includes percentile comparison against other flagged providers and mitigation recommendations."
-              agent="investigation"
               params={["providerId: string"]}
               returns={["riskScore (0-100)", "scoreBreakdown[]", "factorBreakdown[]", "percentileRanking", "mitigatingFactors[]", "conclusion"]}
             />
             <ToolCard
               name="search_similar_providers"
               description="Finds providers with matching billing patterns using two methods: 'statistical' (within 30% of metrics) or 'semantic' (AI embeddings via pgvector for deeper pattern matching). Useful for expanding fraud ring investigations or identifying copycat behavior patterns."
-              agent="investigation"
               params={["providerId: string", "method: 'statistical' | 'semantic'"]}
               returns={["similarityScore", "sharedPatterns[]", "flaggedForFraud status", "profileSummary (semantic only)"]}
             />
             <ToolCard
               name="search_fraud_patterns"
               description="Natural language search for fraud patterns using AI embeddings. Accepts plain English queries like 'high claim volume providers treating elderly patients' or 'unusual billing patterns for outpatient procedures'. Converts query to vector embedding and searches against provider profiles using pgvector similarity."
-              agent="investigation"
               params={["query: string", "limit?: number (1-20)", "minSimilarity?: number (0-1)"]}
               returns={["similarity score", "flaggedForFraud", "totalClaims", "totalReimbursement", "profileSummary"]}
             />
@@ -321,43 +312,18 @@ function StatItem({
 function ToolCard({
   name,
   description,
-  agent,
   params,
   returns,
 }: {
   name: string;
   description: string;
-  agent: "detection" | "investigation" | "a2a";
   params?: string[];
   returns?: string[];
 }) {
-  const getBorderColor = () => {
-    switch (agent) {
-      case "detection":
-        return "border-blue-900/50";
-      case "investigation":
-        return "border-green-900/50";
-      case "a2a":
-        return "border-emerald-900/50";
-    }
-  };
-
-  const getAgentBadge = () => {
-    switch (agent) {
-      case "detection":
-        return <Badge variant="outline" className="text-[10px] border-blue-800 text-blue-400">Claude</Badge>;
-      case "investigation":
-        return <Badge variant="outline" className="text-[10px] border-green-800 text-green-400">Gemini</Badge>;
-      case "a2a":
-        return <Badge variant="outline" className="text-[10px] border-emerald-800 text-emerald-400">A2A</Badge>;
-    }
-  };
-
   return (
-    <div className={`border ${getBorderColor()} bg-zinc-900 p-4`}>
-      <div className="flex items-center justify-between mb-3">
+    <div className="border border-zinc-800 bg-zinc-900 p-4">
+      <div className="mb-3">
         <code className="text-sm text-zinc-200 font-mono font-semibold">{name}</code>
-        {getAgentBadge()}
       </div>
       <p className="text-sm text-zinc-400 mb-4 leading-relaxed">{description}</p>
       {params && params.length > 0 && (
