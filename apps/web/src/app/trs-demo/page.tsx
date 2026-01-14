@@ -30,7 +30,7 @@ export default function TRSDemoPage() {
                 Solarys Fraud Detection Demo
               </h1>
               <p className="text-xl text-zinc-400 mb-8">
-                A fraud investigation system running against 558K healthcare claims, with Claude and Gemini sharing the same detection tools via MCP and coordinating investigations through A2A.
+                A fraud investigation system running against 558K healthcare claims, with Claude and Gemini sharing detection tools via MCP and coordinating investigations through A2A.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="primary" onClick={scrollToDemo}>
